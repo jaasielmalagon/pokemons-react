@@ -2,9 +2,10 @@ import axios from "axios";
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 
-export const SearchInput = ({ pokemonData }) => {
-  const [estadoPokemons, cambiarEstadoPokemons] = useState([]);
+export const SearchInputByName = ({ pokemonData }) => {
+  const [estadoPokemon, cambiarEstadoPokemon] = useState([]);
   const [estadoSearch, cambiarEstadoSearch] = useState([]);
+  const [showTable, showTableState] = useState(false);
 
   useEffect(() => {
     // getPokemon();
@@ -16,11 +17,13 @@ export const SearchInput = ({ pokemonData }) => {
       .then((response) => {
         console.log(response);
         let pokemons = response.data;
-        cambiarEstadoPokemons(pokemons);
+        cambiarEstadoPokemon(pokemons);
+        showTableState(true);
       })
       .catch((error) => {
         console.error(error);
-        cambiarEstadoPokemons([]);
+        cambiarEstadoPokemon([]);
+        showTableState(false);
       });
     return pokemon;
   };
@@ -45,7 +48,7 @@ export const SearchInput = ({ pokemonData }) => {
                     aria-describedby="basic-addon1"
                     value={estadoSearch}
                     onChange={(evt) => {
-                      cambiarEstadoSearch(evt.target.value);
+                      cambiarEstadoSearch(evt.target.value.toLowerCase());
                     }}
                   />
                 </div>
@@ -56,23 +59,55 @@ export const SearchInput = ({ pokemonData }) => {
             </form>
           </div>
         </div>
-        {estadoPokemons && (
-          <div className="row g-0 mb-5" style={{color: "white"}}>
+        {showTable === true && (
+          <div className="row g-0 mb-5">
             <div className="col-12">
               <h3>Resultados</h3>
             </div>
             <div className="col-12">
-              <table className="table">
+              <img
+                alt={estadoPokemon.name}
+                src={`https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${estadoPokemon.id}.png`}
+              ></img>
+              <table className="table" style={{ color: "white" }}>
                 <thead>
-                  <tr>                    
+                  <tr>
                     <th scope="col">Nombre</th>
+                    <th scope="col">Habilidades</th>
+                    <th scope="col">Formas</th>
+                    <th scope="col">Altura</th>
                   </tr>
                 </thead>
                 <tbody>
-                  {console.log(estadoPokemons)}
+                  {console.log(estadoPokemon)}
                   {
-                    <tr>                      
-                      <td>{estadoPokemons.name}</td>
+                    <tr>
+                      <td>{estadoPokemon.name}</td>
+                      <td className="">
+                        <ol
+                          className="w-50"
+                          style={{ margin: "auto", padding: "0" }}
+                        >
+                          {estadoPokemon.abilities.map((ability) => (
+                            <li key={ability.ability.name}>
+                              {ability.ability.name}
+                            </li>
+                          ))}
+                        </ol>
+                      </td>
+                      <td>
+                        {
+                          <ol
+                            className="w-50"
+                            style={{ margin: "auto", padding: "0" }}
+                          >
+                            {estadoPokemon.forms.map((form) => (
+                              <li key={form.name}>{form.name}</li>
+                            ))}
+                          </ol>
+                        }
+                      </td>
+                      <td>{estadoPokemon.height}</td>
                     </tr>
                   }
                 </tbody>

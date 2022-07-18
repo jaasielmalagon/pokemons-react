@@ -1,7 +1,7 @@
 import React from "react";
-import { BrowserRouter as Router, Routes, Route, Link } from "react-router-dom";
+import { BrowserRouter as Router, Routes, Route} from "react-router-dom";
 import { PokemonList } from "./components/pokemons";
-import { SearchInput } from "./components/searchDetailPokemon";
+import { SearchInputByName } from "./components/searchDetailPokemon";
 import "./styles/App.css";
 
 export const App = () => {
@@ -11,7 +11,7 @@ export const App = () => {
         <header className="App-header">
           <Routes>
             <Route path="" element={<PokemonList />}></Route>
-            <Route path="/search" element={<SearchInput />}></Route>
+            <Route path="/searchByName" element={<SearchInputByName />}></Route>
             <Route
               path="404"
               element={
