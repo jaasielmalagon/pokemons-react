@@ -40,11 +40,11 @@ export const Modal = ({ pokemonData }) => {
     return species;
   };
 
-  const getEvolution = async (urlEvolution) =>{
+  const getEvolution = async (urlEvolution) => {
     const evolutions = await axios
       .get(urlEvolution)
       .then((response) => {
-        const chain = response.data.chain; 
+        const chain = response.data.chain;
         cambiarEstadoPokemonEvolucion(chain);
       })
       .catch((error) => {
@@ -52,7 +52,7 @@ export const Modal = ({ pokemonData }) => {
         return "";
       });
     return evolutions;
-  }
+  };
 
   return (
     <>
@@ -76,79 +76,80 @@ export const Modal = ({ pokemonData }) => {
               </svg>
             </BotonCerrar>
             <Contenido>
-              <h1>{estadoPokemon.name.toUpperCase()}</h1>
+              <h2>{estadoPokemon.name.toUpperCase()}</h2>
               <div className="row">
                 <img
                   alt={estadoPokemon.name}
                   src={estadoPokemon.sprites.front_default}
                 />
               </div>
-              <div
-                className="row d-flex justify-content-between mb-4"
-                style={{
-                  overflowX: "hidden",
-                  overflowY: "auto",
-                  maxHeight: "200px",
-                  border: "black solid 2px",
-                  borderRadius: "10px",
-                  padding: "10px",
-                }}
-              >
-                {estadoPokemonEvolucion.evolves_to.map((node, i) => (
-                  <div
-                    key={node.species.name + "-evo-" + i}
-                    className="card mb-2"
-                    style={{ width: "18rem" }}
-                  >
-                    <div className="card-body">
-                      <div className="row d-flex justify-content-between mb-3">
-                        <h5 className="card-title">{node.species.name}</h5>
-                        {console.log(node)}
-                        {node.evolves_to.map((subnode, i) => (
-                          <div
-                            className="col"
-                            style={{ border: "1px solid black" }}
-                            key={subnode.species.name + "-evosubnode-" + i}
-                          >
-                            <p>{subnode.species.name}</p>
-                            <img
-                              style={{ width: "50px", height: "50px" }}
-                              key={subnode.species.name}
-                              alt={subnode.species.name}
-                              src={""}
-                            />
-                          </div>
-                        ))}
-                        {/* {Object.keys(
-                          estadoPokemon.sprites.versions[version]
-                        ).map((evolution) => (
-                          <div
-                            className="col"
-                            style={{ border: "1px solid black" }}
-                          >
-                            <p>{evolution}</p>
-                            <img
-                              style={{ width: "50px", height: "50px" }}
-                              key={evolution}
-                              alt={evolution}
-                              src={
-                                estadoPokemon.sprites.versions[version][
-                                  evolution
-                                ].front_default
-                              }
-                            />
-                          </div>
-                        ))} */}
-                      </div>
-                      <a href="#" className="btn btn-primary">
-                        Go somewhere
-                      </a>
-                    </div>
-                  </div>
-                ))}
-              </div>
 
-              <Boton onClick={() => cambiarEstadoModal(false)}>Aceptar</Boton>
+              <Subcontainer>
+                <div className="row g-0 mb-5">
+                  <div className="col-12">
+                    <h3>Habilidades</h3>
+                  </div>
+                  <div className="col-12">
+                    <table className="table">
+                      <thead>
+                        <tr>
+                          <th scope="col">#</th>
+                          <th scope="col">Nombre</th>
+                          <th scope="col">Visibilidad</th>
+                          <th scope="col">Slot</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {/* {console.log(estadoPokemon.abilities)} */}
+                        {estadoPokemon.abilities.map((item) => (
+                          <tr key={item.ability.name}>
+                            <th scope="row">1</th>
+                            <td>{item.ability.name}</td>
+                            <td>{item.is_hidden ? "Oculta" : "Visible"}</td>
+                            <td>{item.slot}</td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+                <div className="row g-0 mb-5">
+                  <div className="col-12">
+                    <h3>Evoluciones</h3>
+                  </div>
+                  <div className="col-12">
+                    <table className="table">
+                      <thead>
+                        <tr>
+                          <th scope="col">#</th>
+                          <th scope="col">Nombre</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {console.log(estadoPokemonEvolucion.evolves_to)}
+                        {estadoPokemonEvolucion.evolves_to.map((node, i) => (
+                          <React.Fragment key={"frag" + i}>
+                            <tr key={node.species.name + "-evoNode-" + i}>
+                              <th scope="row">{i}</th>
+                              <td>{node.species.name}</td>
+                            </tr>
+                            {node.evolves_to.map((subnode, i) => (
+                              <tr
+                                key={subnode.species.name + "-evoSubnode-" + i}
+                              >
+                                <th scope="row">{i}</th>
+                                <td>{subnode.species.name}</td>
+                              </tr>
+                            ))}
+                          </React.Fragment>
+                        ))}
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+              </Subcontainer>
+
+              {/* <Boton onClick={() => cambiarEstadoModal(false)}>Aceptar</Boton> */}
             </Contenido>
           </ContenedorModal>
         </Overlay>
@@ -171,6 +172,8 @@ const Overlay = styled.div`
 
 const ContenedorModal = styled.div`
   width: 50%;
+  max-height: 90%;
+  height: 90%;
   min-height: 100px;
   background: #fff;
   position: relative;
@@ -181,6 +184,8 @@ const ContenedorModal = styled.div`
 `;
 
 const Encabezado = styled.div`
+  height: 15%;
+  max-height: 15%;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -217,6 +222,8 @@ const BotonCerrar = styled.button`
 `;
 
 const Contenido = styled.div`
+  height: 85%;
+  max-height: 85%;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -231,6 +238,11 @@ const Contenido = styled.div`
     vertical-align: top;
     border-radius: 3px;
   }
+`;
+
+const Subcontainer = styled.div`
+  overflow-y: auto;
+  width: 100%;
 `;
 
 const Boton = styled.button`
