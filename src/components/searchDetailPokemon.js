@@ -60,7 +60,7 @@ export const SearchInputByName = ({ pokemonData }) => {
           </div>
         </div>
         {showTable === true && (
-          <div className="row g-0 mb-5">
+          <div className="row g-0 my-5">
             <div className="col-12">
               <h3>Resultados</h3>
             </div>
@@ -114,6 +114,10 @@ export const SearchInputByName = ({ pokemonData }) => {
               </table>
             </div>
           </div>
+        )}
+
+        {showTable === false && (
+          <h3 className="my-5">SIN RESULTADOS OBTENIDOS</h3>
         )}
       </div>
     </>
